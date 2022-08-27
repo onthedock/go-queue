@@ -40,3 +40,24 @@ r:= gin.Default()
 Importamos el paquete con `go get github.com/gin-gonic/gin` o usamos `go mod tidy`:
 
 > En mi caso, ya dispongo del paquete descargado, por lo que sólo es necesario usarlo en `main()` y ejecutar `go mod tidy`
+
+---
+
+Más ideas...
+
+En la versión del código del *commit* `fffdaee` tras llamar a la apliación con:
+
+```shell
+$ curl -X POST http://localhost:8080/api/v1/add/12/23
+{"num1":12,"num2":23,"operation":"add","result":"35"}
+```
+
+... se devuelve directamente el resultado al solicitante.
+
+Como la idea es simular algún tipo de cola, podemos, por ejemplo generar un número de *job*, que el usuario puede usar más tarde para consultar el estado del job.
+
+Podemos almacenar el resultado en un documento (un fichero) con formato JSON en el disco o guardarlo en una base de datos. La forma más sencilla es mediante un fichero.
+
+Para que el Id del *job* sea único, usamos el paquete [`uuid`](https://pkg.go.dev/github.com/google/uuid) de Go.
+
+> En [Generate a UUID/GUID in Go (Golang)](https://golangbyexample.com/generate-uuid-guid-golang/) de GoLangByExample tenemos un ejemplo del uso del paquete.
