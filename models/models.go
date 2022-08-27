@@ -1,30 +1,38 @@
 package models
 
-import "time"
+import (
+	"encoding/json"
+	"io/ioutil"
+	"log"
+	"time"
+
+	"github.com/google/uuid"
+)
 
 type Job struct {
-	Id          int       `json:"id"`
+	Id          string    `json:"id"`
+	Num1        int       `json:"num1"`
+	Num2        int       `json:"num2"`
 	Created     time.Time `json:"created"`
 	LastUpdated time.Time `json:"updated"`
-	Status      string    `json:"status"`
-	Result      string    `json:"result"`
+	Result      int       `json:"result"`
 }
 
-var jobs []Job = make([]Job, 0)
-
-func initialize() {
-	for i := 0; i < 100; i++ {
-		job := Job{i, time.Now(), time.Now(), "pending", "none"}
-		jobs = append(jobs, job)
+func CreateJob(n1, n2 int) (uuid.UUID, error) {
+	jobid := uuid.New()
+	var job = Job{
+		Id:          jobid.String(),
+		Num1:        n1,
+		Num2:        n2,
+		Created:     time.Now(),
+		LastUpdated: time.Now(),
+		Result:      0,
 	}
+	j, err := json.Marshal(job)
+	if err != nil {
+		log.Fatalf("[ ERROR ] Failed to convert struct  to JSON '%s'\n", err.Error())
+	}
+	ioutil.WriteFile(jobid.String()+"json.pending", []byte(j), 0664)
 
-}
-
-func AddJob(n1, n2 int) (int, error) {
-	return n1 + n2, nil
-}
-
-func GetJob(jid int) (Job, error) {
-	initialize()
-	return jobs[jid], nil
+	return jobid, nil
 }

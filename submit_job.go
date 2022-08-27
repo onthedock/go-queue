@@ -25,18 +25,15 @@ func submitJob(c *gin.Context) {
 		return
 	}
 
-	result, err := models.AddJob(n1, n2)
+	jobId, err := models.CreateJob(n1, n2)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"message": "unable to process the job",
+			"message": "unable to create the job",
 		})
 		return
 	}
 
 	c.JSON(http.StatusAccepted, gin.H{
-		"operation": "add",
-		"num1":      n1,
-		"num2":      n2,
-		"result":    strconv.Itoa(result),
+		"job": jobId.String(),
 	})
 }
