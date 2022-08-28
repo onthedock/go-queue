@@ -61,3 +61,22 @@ Podemos almacenar el resultado en un documento (un fichero) con formato JSON en 
 Para que el Id del *job* sea único, usamos el paquete [`uuid`](https://pkg.go.dev/github.com/google/uuid) de Go.
 
 > En [Generate a UUID/GUID in Go (Golang)](https://golangbyexample.com/generate-uuid-guid-golang/) de GoLangByExample tenemos un ejemplo del uso del paquete.
+
+---
+
+Más ideas....
+
+El proceso completo sería:
+
+usuario --> envía petición al servidor para sumar dos números
+api server --> comprueba que los datos son correctos
+api server --> genera un documento de job (con un jobID)
+api server --> devuelve el Id del job al usuario
+
+Además del proceso del api server, que se encarga de interaccionar con el usuario, debería haber otro proceso que revisa los jobs que están pendientes para procesarlos.
+
+La "cola" se puede implementar de varias maneras. Como quiero trabajar con ficheros, el documento creado por el api server cuando recibe la petición del usuario puede tener la extensión *pending*, por ejemplo. Así, el proceso de ejecución de los jobs debe obtener los ficheros con extensión *pending*. Otra opción sería una base de datos, pero excepto si se usa SQLite, todas las bases de datos requerirán un componente adicional que ejecutar, por lo que vamos a hacerlo lo más simple posible.
+
+apiserver --> recibe los datos del usuario, genera un id y lo devuelve al usuario tras generar el fichero.
+processor --> procesa la operación, guarda el resultado en el fichero, cambia la extensión. 
+cleaner --> elimina los ficheros que ya han sido descargados por el usuario
