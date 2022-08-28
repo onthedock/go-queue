@@ -57,7 +57,7 @@ func PendingJobs() {
 	}
 	for _, j := range pendingJobs {
 		var job Job
-		job, err = loadJob(j)
+		job, err = LoadJob(j)
 		if err != nil {
 			log.Printf("[error] failed to read job from file: %s", err.Error())
 			return
@@ -68,7 +68,7 @@ func PendingJobs() {
 	}
 }
 
-func loadJob(jobFile string) (Job, error) {
+func LoadJob(jobFile string) (Job, error) {
 	var job = Job{}
 
 	jobBytes, err := os.ReadFile(jobFile)
