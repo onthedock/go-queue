@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -48,13 +47,14 @@ func pendingJobs() {
 	}
 	for _, j := range pendingJobs {
 		var job models.Job
-		fmt.Printf("path %s\n", j)
 		job, err = readJob(j)
 		if err != nil {
 			log.Printf("[error] failed to read job from file: %s", err.Error())
 			return
 		}
-		fmt.Printf("Job %v\n", job)
+		if err = updateJob(job); err != nil {
+			log.Printf("[error] failed to update job %s: %s", job.Id, err.Error())
+		}
 	}
 }
 
@@ -73,21 +73,22 @@ func readJob(jobFile string) (models.Job, error) {
 	return job, nil
 }
 
-// func updateJob(job models.Job) error {
-// 	job.LastUpdated = time.Now()
-// 	job.Result = job.Num1 + job.Num2
-// 	j, err := json.Marshal(job)
-// 	if err != nil {
-// 		log.Fatalf("[ ERROR ] Failed to convert struct  to JSON '%s'\n", err.Error())
-// 		return err
-// 	}
-// 	if err := os.WriteFile(job.Id+".json", []byte(j), 0664); err != nil {
-// 		log.Fatalf("[ERROR] Failed to update job '%s', '%s'", job.Id, err.Error())
-// 		return err
-// 	}
-// 	if err := os.Remove(job.Id + ".json.pending"); err != nil {
-// 		log.Printf("[ERROR] Failed to delete file '%s', '%s'", job.Id+".json.pending", err.Error())
-// 		return err
-// 	}
-// 	return nil
-// }
+func updateJob(job models.Job) error {
+	job.LastUpdated = time.Now()
+	job.Result = job.Num1 + job.Num2
+	j, err := json.Marshal(job)
+	if err != nil {
+		log.Fatalf("[ ERROR ] Failed to convert struct to JSON '%s'\n", err.Error())
+		return err
+	}
+	if err := os.WriteFile(job.Id+".json", []byte(j), 0664); err != nil {
+		log.Fatalf("[ERROR] Failed to update job '%s', '%s'", job.Id, err.Error())
+		return err
+	}
+	if err := os.Remove(job.Id + ".pending"); err != nil {
+		log.Printf("[ERROR] Failed to delete file '%s', '%s'", job.Id+".pending", err.Error())
+		return err
+	}
+	log.Printf("[ ok ] processed jobId '%s' successfully\n", job.Id)
+	return nil
+}
