@@ -1,12 +1,14 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/fs"
 	"log"
 	"os"
 	"os/signal"
 	"path/filepath"
+	"queue/models"
 	"syscall"
 	"time"
 )
@@ -26,17 +28,6 @@ func main() {
 			pendingJobs()
 		}
 	}
-
-	// var filename string = "907292c5-b00e-4133-ae81-492743177605.json.pending"
-	// fileBytes, err := os.ReadFile(filename)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// var j = new(models.Job)
-	// if err := json.Unmarshal(fileBytes, j); err != nil {
-	// 	log.Fatalf("[ERROR] Failed parse file '%s': '%s'", filename, err.Error())
-	// }
-	// updateJob(*j)
 }
 
 func pendingJobs() {
@@ -44,19 +35,42 @@ func pendingJobs() {
 	if err != nil {
 		log.Fatalf("[error] Failed to get current working directory '%s", err.Error())
 	}
-	// var pendingJobs []string
+	var pendingJobs []string
 	// filepath.WalkDir (go1.16) is more efficient thant filepath.Walk
 	err = filepath.WalkDir(cwd, func(path string, d fs.DirEntry, err error) error {
 		if filepath.Ext(path) == ".pending" {
-			fmt.Printf("path %s\n", path)
+			pendingJobs = append(pendingJobs, path)
 		}
-
 		return nil
 	})
 	if err != nil {
 		log.Fatalf("[error] Failed walk dir %s", err.Error())
 	}
+	for _, j := range pendingJobs {
+		var job models.Job
+		fmt.Printf("path %s\n", j)
+		job, err = readJob(j)
+		if err != nil {
+			log.Printf("[error] failed to read job from file: %s", err.Error())
+			return
+		}
+		fmt.Printf("Job %v\n", job)
+	}
+}
 
+func readJob(jobFile string) (models.Job, error) {
+	var job = models.Job{}
+
+	jobBytes, err := os.ReadFile(jobFile)
+	if err != nil {
+		log.Printf("[error] failed to read file %s: %s", jobFile, err.Error())
+		return job, err
+	}
+	if err := json.Unmarshal(jobBytes, &job); err != nil {
+		log.Printf("[error] failed to parse file '%s': '%s'", jobFile, err.Error())
+		return job, err
+	}
+	return job, nil
 }
 
 // func updateJob(job models.Job) error {
