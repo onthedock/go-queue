@@ -32,7 +32,7 @@ func CreateJob(n1, n2 int) (uuid.UUID, error) {
 	if err != nil {
 		log.Fatalf("[ ERROR ] Failed to convert struct  to JSON '%s'\n", err.Error())
 	}
-	os.WriteFile(jobid.String()+".json.pending", []byte(j), 0664)
+	os.WriteFile(jobid.String()+".pending", []byte(j), 0664)
 
 	return jobid, nil
 }

@@ -6,4 +6,4 @@ build_api:
 processor:
 	go run cmd/processor/main.go
 processor_reset:
-	mv 907292c5-b00e-4133-ae81-492743177605.json 907292c5-b00e-4133-ae81-492743177605.json.pending
+	mv 907292c5-b00e-4133-ae81-492743177605.json 907292c5-b00e-4133-ae81-492743177605.pending
