@@ -57,3 +57,20 @@ Date: Tue, 30 Aug 2022 19:26:41 GMT
     "message": "unexpected error"
 }
 ```
+
+## Opciones de configuración
+
+## Processor
+
+```shell
+$ processor -interval 5s # checks for pending jobs every 5s
+$ processor -help
+```
+
+## Cleaner
+
+```shell
+$ cleaner -max_age 24h # removes job's files older than 24h
+$ cleaner -loop -interval 15m -max_age 1h # runs in a loop, checking every 15m files older than 1h
+$ cleaner -help
+```
