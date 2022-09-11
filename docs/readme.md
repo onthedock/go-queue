@@ -60,17 +60,22 @@ Date: Tue, 30 Aug 2022 19:26:41 GMT
 
 ## Opciones de configuración
 
-## Processor
+### Processor
 
-```shell
-$ processor -interval 5s # checks for pending jobs every 5s
-$ processor -help
+```bash
+# checks for pending jobs every 5s
+processor -interval 5s
+# get help/usage
+processor -help
 ```
 
-## Cleaner
+### Cleaner
 
-```shell
-$ cleaner -max_age 24h # removes job's files older than 24h
-$ cleaner -loop -interval 15m -max_age 1h # runs in a loop, checking every 15m files older than 1h
-$ cleaner -help
+```bash
+# removes job's files older than 24h
+cleaner -max_age 24h
+# runs in a loop, checking every 15m files older than 1h
+cleaner -loop -interval 15m -max_age 1h
+# get help/usage
+cleaner -help
 ```
