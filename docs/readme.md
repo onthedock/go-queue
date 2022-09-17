@@ -1,6 +1,6 @@
 # go-queue
 
-![Diagrama](go-queue.svg)
+![Diagrama](go-queue-v1.svg)
 
 > Los ejemplos se muestran usando [`httpie`](https://httpie.io/cli), aunque también se muestra el comando `curl` equivalente.
 
