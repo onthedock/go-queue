@@ -1,4 +1,4 @@
-package models
+package jobs
 
 import (
 	"encoding/json"
@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func updateJob(job Job) error {
+func update(job Job) error {
 	job.LastUpdated = time.Now()
 	job.Result = job.Num1 + job.Num2
 	j, err := json.Marshal(job)

@@ -1,4 +1,4 @@
-package models
+package jobs
 
 import (
 	"io/fs"
@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func CleanJobs(max_age time.Duration) {
+func Clean(max_age time.Duration) {
 	cwd, err := os.Getwd()
 	if err != nil {
 		log.Fatalf("[error] failed to get current working directory '%s", err.Error())
@@ -27,12 +27,12 @@ func CleanJobs(max_age time.Duration) {
 	}
 	for _, jobFile := range garbageJobs {
 		var job Job
-		job, err = LoadJob(jobFile)
+		job, err = Load(jobFile)
 		if err != nil {
 			log.Printf("[error] failed to read job from file: %s", err.Error())
 			return
 		}
-		if err = deleteJob(job, max_age, jobFile); err != nil {
+		if err = delete(job, max_age, jobFile); err != nil {
 			log.Printf("[error] failed to update job %s: %s", job.Id, err.Error())
 		}
 	}

@@ -1,4 +1,4 @@
-package models
+package jobs
 
 import (
 	"io/fs"
@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 )
 
-func PendingJobs() {
+func Pending() {
 	cwd, err := os.Getwd()
 	if err != nil {
 		log.Fatalf("[error] Failed to get current working directory '%s", err.Error())
@@ -25,12 +25,12 @@ func PendingJobs() {
 	}
 	for _, j := range pendingJobs {
 		var job Job
-		job, err = LoadJob(j)
+		job, err = Load(j)
 		if err != nil {
 			log.Printf("[error] failed to read job from file: %s", err.Error())
 			return
 		}
-		if err = updateJob(job); err != nil {
+		if err = update(job); err != nil {
 			log.Printf("[error] failed to update job %s: %s", job.Id, err.Error())
 		}
 	}

@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	"queue/models"
+	"queue/jobs"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -25,7 +25,7 @@ func submitJob(c *gin.Context) {
 		return
 	}
 
-	jobId, err := models.CreateJob(n1, n2)
+	jobId, err := jobs.Create(n1, n2)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "unable to create the job",

@@ -1,4 +1,4 @@
-package models
+package jobs
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-func CreateJob(n1, n2 int) (uuid.UUID, error) {
+func Create(n1, n2 int) (uuid.UUID, error) {
 	jobid := uuid.New()
 	var job = Job{
 		Id:          jobid.String(),

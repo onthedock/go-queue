@@ -1,4 +1,4 @@
-package models
+package jobs
 
 import (
 	"log"
@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func deleteJob(job Job, max_age time.Duration, jobFile string) error {
+func delete(job Job, max_age time.Duration, jobFile string) error {
 	var age time.Duration = time.Since(job.LastUpdated)
 	if age > max_age {
 		if err := os.Remove(jobFile); err != nil {

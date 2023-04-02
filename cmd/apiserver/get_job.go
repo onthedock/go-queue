@@ -2,7 +2,7 @@ package main
 
 import (
 	"net/http"
-	"queue/models"
+	"queue/jobs"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -24,7 +24,7 @@ func getJob(c *gin.Context) {
 		return
 	}
 
-	job, err := models.LoadJob(juuid.String() + ".json")
+	job, err := jobs.Load(juuid.String() + ".json")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"message": "unexpected error",

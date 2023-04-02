@@ -1,4 +1,4 @@
-package models
+package jobs
 
 import (
 	"encoding/json"
@@ -6,7 +6,7 @@ import (
 	"os"
 )
 
-func LoadJob(jobFile string) (Job, error) {
+func Load(jobFile string) (Job, error) {
 	var job = Job{}
 
 	jobBytes, err := os.ReadFile(jobFile)
